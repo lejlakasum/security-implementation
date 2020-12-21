@@ -86,17 +86,8 @@ export class Uposlenici extends Component {
     }
 
     kreirajUposlenika = () => {
-        var idEdukacije = ''
-        for (var i = 0; i < this.state.edukacije.length; i++) {
-            if (this.state.edukacije[i].value === this.state.edukacija) idEdukacije = this.state.edukacije[i].id;
-        }
 
-        var tempZaposlenje = this.state.zaposlenje;
-        var tempRodjenje = this.state.rodjenje;
-        axios.get(`http://localhost:8083/educations/${idEdukacije}`)
-            .then(res => {
-                const podaciOEdukaciji = res.data;
-                this.setState({ podaciOEdukaciji });
+        
                 axios.post('http://localhost:8083/employees', {
                     firstName: this.state.ime,
                     lastName: this.state.prezime,
@@ -120,7 +111,7 @@ export class Uposlenici extends Component {
                 }
                 TEMP.push(temp);
                 this.setState({sviUposlenici:TEMP})   */
-            })
+            
     }
 
     unosNovog = (e) => {
