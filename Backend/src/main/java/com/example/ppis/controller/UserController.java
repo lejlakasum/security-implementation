@@ -23,6 +23,11 @@ public class UserController {
         return userService.login(user);
     }
 
+    @PostMapping("/user/register")
+    UserRegisterDTO register(@RequestBody @Valid User user) throws Exception {
+        return userService.postUser(user);
+    }
+
     @DeleteMapping("/user/{id}")
     HashMap<String,String> deleteUser(@PathVariable Integer id) throws Exception {
         return userService.deleteUserById(id);

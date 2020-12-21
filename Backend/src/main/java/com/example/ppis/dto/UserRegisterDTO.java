@@ -8,24 +8,18 @@ import java.util.List;
 
 public class UserRegisterDTO {
 
-    @Pattern(regexp = "[\\w\\d]{3,}", message = "Username može sadržati najmanje 3 slova ili/i broja")
     String username;
 
-    //@Pattern(regexp = "[\\w\\d]{7,}", message = "Sifra mora imati minimalno 7 znakova (slova ili brojeva)")
-    String password;
-
-    @Pattern(regexp = "^(.+)@(.+)$", message = "Email nije dobrog formata")
     String email;
 
-    List<UserRoleDTO> roleList;
+    UserRoleDTO role;
 
     public UserRegisterDTO() {}
 
-    public UserRegisterDTO(@Pattern(regexp = "[\\w\\d]{3,}", message = "Username može sadržati najmanje 3 slova ili/i broja") String username, String password, @Pattern(regexp = "^(.+)@(.+)$", message = "Email nije dobrog formata") String email, List<UserRoleDTO> roleList) {
+    public UserRegisterDTO(String username, String email, UserRoleDTO role) {
         this.username = username;
-        this.password = password;
         this.email = email;
-        this.roleList = roleList;
+        this.role = role;
     }
 
     public String getUsername() {
@@ -36,14 +30,6 @@ public class UserRegisterDTO {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -52,11 +38,11 @@ public class UserRegisterDTO {
         this.email = email;
     }
 
-    public List<UserRoleDTO> getRoleList() {
-        return roleList;
+    public UserRoleDTO getRole() {
+        return role;
     }
 
-    public void setRoleList(List<UserRoleDTO> roleList) {
-        this.roleList = roleList;
+    public void setRole(UserRoleDTO role) {
+        this.role = role;
     }
 }

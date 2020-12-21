@@ -43,8 +43,6 @@ public class PpisProjekatApplication {
 			// korisnici
 
 			User k1 = userRepository.save(new User("admin", "$2y$12$d.WC//FFyNCsaGzHJhalAuH6EMbmKaPDHUWxGhiQvoghruwrUUjCm", "ante.antic@gmail.com", role1));
-			User k2 = userRepository.save(new User("hrmanager", "$2y$12$d.WC//FFyNCsaGzHJhalAuH6EMbmKaPDHUWxGhiQvoghruwrUUjCm", "amna.amnic@gmail.com", role2));
-			User k3 = userRepository.save(new User("supmanager", "$2y$12$d.WC//FFyNCsaGzHJhalAuH6EMbmKaPDHUWxGhiQvoghruwrUUjCm", "stevo.stevic@gmail.com", role3));
 
 
 			log.info("Svi korisnici \n");

@@ -55,6 +55,32 @@ public class UserService {
         return new ResponseMessageDTO("Uspjesno ste prijavljeni na sistem").getHashMap();
     }
 
+    public UserRegisterDTO postUser(User user) throws Exception {
+
+        Role role = roleRepository.findById(user.getRole().getId()).get();
+
+        if(role == null) {
+            throw new Exception("Role with id " + user.getRole().getId().toString() + " does not exists");
+        }
+
+        user.setRole(role);
+        user.setPassword(hashPassword(user.getPassword()));
+
+        User newUser =  userRepository.save(user);
+
+        UserRegisterDTO userRegisterDTO = new UserRegisterDTO(
+                newUser.getUsername(),
+                newUser.getEmail(),
+                new UserRoleDTO(
+                        newUser.getRole().getId(),
+                        newUser.getRole().getName()
+                )
+        );
+
+        return userRegisterDTO;
+
+    }
+
     public HashMap<String, String> deleteUserById(Integer id) throws Exception {
         if (!userRepository.existsById(id)) {
             throw new Exception("Obrisan user sa id-em "+id);

@@ -7,10 +7,13 @@ public class UserRoleDTO {
     @NotBlank
     Integer roleId;
 
+    String name;
+
     public UserRoleDTO() {}
 
-    public UserRoleDTO(@NotBlank Integer roleId) {
+    public UserRoleDTO(@NotBlank Integer roleId, String name) {
         this.roleId = roleId;
+        this.name = name;
     }
 
     public Integer getRoleId() {
@@ -19,5 +22,13 @@ public class UserRoleDTO {
 
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

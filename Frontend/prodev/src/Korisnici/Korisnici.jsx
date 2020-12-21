@@ -69,12 +69,14 @@ export class Korisnici extends Component {
             username: this.state.username,
             email: this.state.email,
             password: this.state.password,
-            roleList: [{
-                roleId: idUloge,
-            }]
+            role: {
+                id: idUloge,
+                name: ""
+            }
         }).then(response => {
             if (response.status === 201 || response.status === 200) alert("Korisnik uspješno registrovan!")
         }).catch(err => {
+            console.log(err)
             alert(err.response.data.errors)
         })
 
@@ -101,12 +103,12 @@ export class Korisnici extends Component {
 
     prikazKorisnika() {
         return this.state.Korisnici.map((korisnik, index) => {
-            const { email, username, roleList, obrisati } = korisnik
+            const { email, username, role, obrisati } = korisnik
             return (
                 <tr key={username}>
                     <td>{username}</td>
                     <td>{email}</td>
-                    <td>{""}</td>
+                    <td>{role.name}</td>
                     <td>{obrisati}
                         <div className="brisanje">
                             <label>
