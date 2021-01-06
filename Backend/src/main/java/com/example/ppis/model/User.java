@@ -12,13 +12,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Pattern(regexp = "[\\w\\d]{3,}", message = "Username može sadržati najmanje 3 slova ili/i broja")
     private String username;
 
-    //@Pattern(regexp = "[\\w\\d]{7,}", message = "Sifra mora imati minimalno 7 znakova (slova ili brojeva)")
     private String password;
 
-    @Pattern(regexp = "^(.+)@(.+)$", message = "Email nije dobrog formata")
+
     private String email;
 
     @ManyToOne
@@ -26,7 +24,7 @@ public class User {
 
     public User() {}
 
-    public User(@Pattern(regexp = "[\\w\\d]{3,}", message = "Username može sadržati najmanje 3 slova ili/i broja") String username, String password, @Pattern(regexp = "^(.+)@(.+)$", message = "Email nije dobrog formata") String email, Role role) {
+    public User(String username, String password,String email, Role role) {
         this.username = username;
         this.password = password;
         this.email = email;
