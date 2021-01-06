@@ -5,6 +5,7 @@ import Admin from './Paneli/Admin'
 import Knowledge from './Paneli/Knowledge'
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
+import PrivateRoute from "./Util/PrivateRoute";
 
 
 function App() {
@@ -12,8 +13,8 @@ function App() {
     <Router>
       <div className="App">
         <Route path="/" exact component={Login} />
-        <Route path="/admin" component={Admin} />
-        <Route path="/knowledge" component={Knowledge} />
+        <PrivateRoute path="/admin" component={Admin} />
+        <PrivateRoute path="/knowledge" component={Knowledge} />
       </div>
     </Router>
   );
