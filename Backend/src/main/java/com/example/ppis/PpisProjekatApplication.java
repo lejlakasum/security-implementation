@@ -72,7 +72,8 @@ public class PpisProjekatApplication {
 
 			// korisnici
 
-			UserRegisterDTO k1 = userRepository.postUser(new User("admin", "password", "ante.antic@gmail.com", role1));
+			UserRegisterDTO k1 = userRepository.postUser(new User("admin", "password", "admin@mail.com", role1));
+			UserRegisterDTO k2 = userRepository.postUser(new User("hradmin", "password", "hr@mail.com", role2));
 
 
 			//tipovi skilova

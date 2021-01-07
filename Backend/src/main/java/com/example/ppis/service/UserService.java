@@ -18,9 +18,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,6 +60,27 @@ public class UserService {
         return hashPassword;
     }
 
+    public void validateToken(String token, String role) throws Exception {
+        String username = JwtUtil.extractUsername(token, SECRET_KEY);
+        UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+        Boolean valid = JwtUtil.validateToken(token, userDetails, SECRET_KEY);
+        User user = userRepository.findByEmail(username);
+        if(role.equals("admin")) {
+            if(!valid || !user.getRole().getName().equals("admin")) {
+                throw new Exception("Invalid token");
+            }
+        }
+        else if (role.equals("hr")) {
+            if(!valid || !user.getRole().getName().equals("hr")) {
+                throw new Exception("Invalid token");
+            }
+        }
+        else if (!role.equals("admin") || !role.equals("hr")) {
+            throw new Exception("Invalid token");
+        }
+
+    }
+
     public LoginDto login(UserLoginDTO loginRequest) throws Exception {
         try {
             authenticationManager.authenticate(
@@ -84,6 +107,16 @@ public class UserService {
 
         if(role == null) {
             throw new Exception("Role with id " + user.getRole().getId().toString() + " does not exists");
+        }
+
+        User existingUser = userRepository.findByEmail(user.getEmail());
+        if(existingUser != null) {
+            throw new Exception("User with given email address already exists");
+        }
+
+        existingUser = userRepository.findByUsername(user.getUsername());
+        if(existingUser != null) {
+            throw new Exception("Chose different username");
         }
 
         user.setRole(role);

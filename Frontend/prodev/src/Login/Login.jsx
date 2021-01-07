@@ -1,8 +1,9 @@
 import React from "react";
 import loginSlika from "../logo.png";
 import { withRouter, Redirect } from 'react-router-dom';
-import { browserHistory } from 'react-router';
+import { browserHistory, useHistory } from 'react-router';
 import axios from 'axios'
+import getUserFromToken from "../Util/getUserFromToken"
 
 export class Login extends React.Component {
     constructor(props) {
@@ -24,20 +25,22 @@ export class Login extends React.Component {
         else if (this.state.username === '') alert('Molimo unesite vaše korisničko ime!');
         else if (this.state.password === '') alert('Molimo unesite vašu lozinku!');
         else {
-            axios.post('http://localhost:8083/user/login', {
+            axios.post('https://localhost:8443/user/login', {
                 password: this.state.password,
                 username: this.state.username
             }).then(res => {
-
-                if (this.state.username == "admin") {
-                    this.props.history.push('/admin')
+                document.cookie = "token=" + res.data.token + "; path=/; max-age=3600;"
+                var user = getUserFromToken()
+                if (user.role == "admin") {
+                    window.location.href = "/admin"
                 }
-                else if (this.state.username == "hrmanager") {
-                    this.props.history.push('/knowledge')
+                else if (user.role == "hr") {
+                    window.location.href = "/knowledge"
                 }
             })
                 .catch(err => {
-                    alert(err.response.data.message)
+                    console.log(err)
+                    alert("Neispravni podaci")
                 })
         }
     }

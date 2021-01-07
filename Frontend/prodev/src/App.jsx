@@ -4,19 +4,23 @@ import { Login, Register } from "./Login/index";
 import Admin from './Paneli/Admin'
 import Knowledge from './Paneli/Knowledge'
 
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
-import PrivateRoute from "./Util/PrivateRoute";
+import { BrowserRouter, Route, Switch, useHistory } from "react-router-dom"
+import PrivateAdminRoute from "./Util/PrivateAdminRoute";
+import PrivateHrRoute from "./Util/PrivateHrRoute";
 
 
 function App() {
+
   return (
-    <Router>
-      <div className="App">
-        <Route path="/" exact component={Login} />
-        <Route path="/admin" component={Admin} />
-        <Route path="/knowledge" component={Knowledge} />
-      </div>
-    </Router>
+    <div>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" exact><Login /></Route>
+          <PrivateAdminRoute path="/admin"><Admin /></PrivateAdminRoute>
+          <PrivateHrRoute path="/knowledge"><Knowledge /></PrivateHrRoute>
+        </Switch>
+      </BrowserRouter>
+    </div>
   );
 }
 

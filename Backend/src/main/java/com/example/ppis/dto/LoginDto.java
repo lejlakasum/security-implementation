@@ -4,6 +4,9 @@ public class LoginDto {
 
     public String token;
 
+    public LoginDto() {
+    }
+
     public LoginDto(String token) {
         this.token = token;
     }

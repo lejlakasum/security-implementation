@@ -9,6 +9,11 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import './style.scss';
 
 class Admin extends React.Component {
+
+    odjava = () => {
+        document.cookie = "token=; path=/; max-age=-9999999;"
+    }
+
     render() {
         return (
             <Router>
@@ -18,7 +23,7 @@ class Admin extends React.Component {
                     <Route path="/admin/uposlenici" component={Uposlenici} />
                     <Route path="/" exact component={Login} />
                 </div>
-                <a href="/" className="odjavaLink">Odjava</a>
+                <a href="/" className="odjavaLink" onClick={this.odjava}>Odjava</a>
             </Router>
         )
     }

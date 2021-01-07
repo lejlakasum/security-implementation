@@ -76,4 +76,15 @@ public class UserController {
 
     }
 
+    @PostMapping("/user/validate")
+    ResponseEntity<Void> validateToken(@RequestBody LoginDto request, @RequestParam String role) {
+        try {
+            userService.validateToken(request.token, role);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+        catch (Exception ex) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 }
