@@ -7,7 +7,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import Modal from 'react-modal'
 import getBaseUrl from '../Util/getBaseUrl'
 
-export class Uposlenici extends Component {
+export class UposleniciAdmin extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -343,52 +343,7 @@ export class Uposlenici extends Component {
                     </button>
                     </div>
                 </div>
-                <div className="formaUposlenici">
-                    <h2>Unos uposlenika</h2>
-                    <div className="form-grupaUposlenici">
-                        <label htmlFor="ime">Ime uposlenika:</label>
-                        <input type="text"
-                            name="ime"
-                            value={this.state.ime}
-                            onChange={e => this.unosNovog(e)} />
-                    </div>
-                    <div className="form-grupaUposlenici">
-                        <label htmlFor="prezime">Prezime uposlenika:</label>
-                        <input type="text"
-                            name="prezime"
-                            value={this.state.prezime}
-                            onChange={e => this.unosNovog(e)} />
-                    </div>
-                    <div className="form-grupaUposlenici">
-                        <label htmlFor="rodjenje">Datum rođenja:</label>
-                        <DatePicker
-                            name="rodjenje"
-                            selected={this.state.startDate2}
-                            onChange={this.handleChangeDateRodjenja}
-                            showTimeSelect
-                            timeFormat="HH:mm"
-                            timeCaption="Vrijeme"
-                            timeIntervals={60}
-                            dateFormat="dd/MM/yyyy, h:mm"
-                        />
-                    </div>
-                    <div className="form-grupaUposlenici">
-                        <label htmlFor="zaposlenje">Datum zaposlenja:</label>
-                        <DatePicker
-                            name="zaposlenje"
-                            selected={this.state.startDate}
-                            onChange={this.handleChangeDateZaposlenja}
-                            showTimeSelect
-                            timeFormat="HH:mm"
-                            timeCaption="Vrijeme"
-                            timeIntervals={60}
-                            dateFormat="dd/MM/yyyy, h:mm"
-                        />
-                    </div>
-                    <button type="button" className="btnDodajUposlenika" onClick={this.kreirajUposlenika}>
-                        Dodavanje novog uposlenika
-                </button>
-                </div>
+
                 <Modal isOpen={this.state.modalIsOpen}>
                     <div>
                         <button onClick={() => this.setState({ modalIsOpen: false })}>Zatvori</button>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Dropdown from 'react-dropdown';
+import getBaseUrl from '../Util/getBaseUrl';
 
 export class Korisnici extends Component {
     constructor(props) {
@@ -26,12 +27,12 @@ export class Korisnici extends Component {
     }
 
     componentWillMount() {
-        axios.get('http://localhost:8083/user/all')
+        axios.get(getBaseUrl() + '/user/all')
             .then(res => {
                 const Korisnici = res.data;
                 this.setState({ Korisnici });
             })
-        axios.get('http://localhost:8083/role/all')
+        axios.get(getBaseUrl() + '/role/all')
             .then(res => {
                 var temp = [];
                 for (var i = 0; i < res.data.length; i++) {
@@ -44,7 +45,7 @@ export class Korisnici extends Component {
     }
 
     obrisiKorisnika = () => {
-        axios.delete(`http://localhost:8083/user/${this.state.id}`)
+        axios.delete(getBaseUrl() + `/user/${this.state.id}`)
             .then(res => {
                 var TEMP = [...this.state.Korisnici];
                 for (var i = 0; i < TEMP.length; i++) {
@@ -65,7 +66,7 @@ export class Korisnici extends Component {
                 break;
             }
         }
-        axios.post('http://localhost:8083/user/register', {
+        axios.post(getBaseUrl() + '/user/register', {
             username: this.state.username,
             email: this.state.email,
             password: this.state.password,

@@ -2,11 +2,12 @@ import Axios from "axios";
 import tokenExists from "./tokenExists"
 import axios from "axios"
 import getToken from "./getToken";
+import getBaseUrl from "./getBaseUrl";
 
 async function isAuthenticated(role) {
 
     if (tokenExists()) {
-        var route = "https://localhost:8443/user/validate?role=" + role
+        var route = getBaseUrl() + "/user/validate?role=" + role
         const response = await axios.post(route, {
             token: getToken("token")
         })

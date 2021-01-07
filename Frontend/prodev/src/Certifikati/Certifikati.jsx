@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Dropdown from 'react-dropdown';
 import DatePicker from "react-datepicker";
+import getBaseUrl from '../Util/getBaseUrl';
 
 export class Certifikati extends Component {
     constructor(props) {
@@ -32,13 +33,13 @@ export class Certifikati extends Component {
     }
 
     componentWillMount() {
-        axios.get('http://localhost:8083/certificate/all')
+        axios.get(getBaseUrl() + '/certificate/all')
             .then(res => {
                 const Certifikati = res.data;
                 this.setState({ Certifikati });
             })
 
-        axios.get('http://localhost:8083/employees')
+        axios.get(getBaseUrl() + '/employees')
             .then(res => {
                 var temp = [];
                 const uposlenikCertifikata = res.data;
@@ -49,7 +50,7 @@ export class Certifikati extends Component {
                 this.setState({ uposlenikCertifikata });
                 this.setState({ uposlenici: temp });
             })
-        axios.get('http://localhost:8083/skills')
+        axios.get(getBaseUrl() + '/skills')
             .then(res => {
                 var temp = [];
                 const vjestinaCertifikata = res.data;
@@ -77,7 +78,7 @@ export class Certifikati extends Component {
     }
 
     obrisiCertifikat = () => {
-        axios.delete(`http://localhost:8083/certificate/${this.state.id}`)
+        axios.delete(getBaseUrl() + `/certificate/${this.state.id}`)
             .then(res => {
                 var TEMP = [...this.state.Certifikati];
                 for (var i = 0; i < TEMP.length; i++) {
@@ -98,7 +99,7 @@ export class Certifikati extends Component {
             if (this.state.uposlenici[i].value === this.state.uposlenik) idUposlenika = this.state.uposlenici[i].id;
         }
 
-        axios.post('http://localhost:8083/certificate', {
+        axios.post(getBaseUrl() + '/certificate', {
             dateOfIssue: this.state.izdavanje,
             empolyeeOnCrtificate: this.state.uposlenikCertifikata[idUposlenika - 1],
             expireDate: this.state.istek,
@@ -180,17 +181,17 @@ export class Certifikati extends Component {
             <div>
                 <h2 id='title'>Postojeći certifikati</h2>
                 <div className="glavniDIV">
-                <table id='certifikati'>
-                    <tbody>
-                        <tr>{this.headerTabele()}</tr>
-                        {this.prikazCertifikata()}
-                    </tbody>
-                </table>
-                <div className="footer">
-                    <button type="button" className="btnObrisiCertifikat" onClick={this.obrisiCertifikat}>
-                        Obriši certifikat
+                    <table id='certifikati'>
+                        <tbody>
+                            <tr>{this.headerTabele()}</tr>
+                            {this.prikazCertifikata()}
+                        </tbody>
+                    </table>
+                    <div className="footer">
+                        <button type="button" className="btnObrisiCertifikat" onClick={this.obrisiCertifikat}>
+                            Obriši certifikat
                 </button>
-                </div>
+                    </div>
                 </div>
                 <div className="formaCert">
                     <h2>Unos certifikata</h2>

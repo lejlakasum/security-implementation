@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import axios from 'axios'
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import getBaseUrl from '../Util/getBaseUrl';
 
 export class Vjestine extends Component {
     constructor(props) {
@@ -20,7 +21,7 @@ export class Vjestine extends Component {
 
     componentWillMount() {
 
-        axios.get('http://localhost:8083/skills')
+        axios.get(getBaseUrl() + '/skills')
             .then(res => {
                 var temp = [];
                 for (var i = 0; i < res.data.length; i++) {
@@ -29,7 +30,7 @@ export class Vjestine extends Component {
                 this.setState({ vjestine: temp });
             })
 
-        axios.get('http://localhost:8083/skill-types')
+        axios.get(getBaseUrl() + '/skill-types')
             .then(res => {
                 var temp = [];
                 for (var i = 0; i < res.data.length; i++) {
@@ -46,7 +47,7 @@ export class Vjestine extends Component {
     }
 
     obrisiVjestinu = () => {
-        axios.delete(`http://localhost:8083/skills/${this.state.id}`)
+        axios.delete(getBaseUrl() + `/skills/${this.state.id}`)
             .then(res => {
                 var TEMP = [...this.state.vjestine];
                 for (var i = 0; i < TEMP.length; i++) {
@@ -71,7 +72,7 @@ export class Vjestine extends Component {
             if (this.state.Tipovivjestina[i].value === this.state.tip) idVjestine = this.state.Tipovivjestina[i].id;
         }
 
-        axios.post('http://localhost:8083/skills', {
+        axios.post(getBaseUrl() + '/skills', {
             name: this.state.vjestina,
             skillType: {
                 id: idVjestine,
@@ -134,17 +135,17 @@ export class Vjestine extends Component {
             <div>
                 <h2 id='title'>Postojeće vještine</h2>
                 <div className="glavniDIV">
-                <table id='vjestine'>
-                    <tbody>
-                        <tr>{this.headerTabele()}</tr>
-                        {this.prikazVjestine()}
-                    </tbody>
-                </table>
-                <div className="footer">
-                    <button type="button" className="btnObrisiVjestinu" onClick={this.obrisiVjestinu}>
-                        Obriši vještinu
+                    <table id='vjestine'>
+                        <tbody>
+                            <tr>{this.headerTabele()}</tr>
+                            {this.prikazVjestine()}
+                        </tbody>
+                    </table>
+                    <div className="footer">
+                        <button type="button" className="btnObrisiVjestinu" onClick={this.obrisiVjestinu}>
+                            Obriši vještinu
                 </button>
-                </div>
+                    </div>
 
                 </div>
                 <div className="formaVjestine">

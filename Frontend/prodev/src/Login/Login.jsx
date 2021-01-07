@@ -4,6 +4,7 @@ import { withRouter, Redirect } from 'react-router-dom';
 import { browserHistory, useHistory } from 'react-router';
 import axios from 'axios'
 import getUserFromToken from "../Util/getUserFromToken"
+import getBaseUrl from "../Util/getBaseUrl";
 
 export class Login extends React.Component {
     constructor(props) {
@@ -25,7 +26,7 @@ export class Login extends React.Component {
         else if (this.state.username === '') alert('Molimo unesite vaše korisničko ime!');
         else if (this.state.password === '') alert('Molimo unesite vašu lozinku!');
         else {
-            axios.post('https://localhost:8443/user/login', {
+            axios.post(getBaseUrl() + '/user/login', {
                 password: this.state.password,
                 username: this.state.username
             }).then(res => {

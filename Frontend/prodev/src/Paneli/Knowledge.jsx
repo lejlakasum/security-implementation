@@ -11,6 +11,11 @@ import { DodavanjeVjestine } from "../DodavanjeVjestine/index"
 import './style.scss';
 
 class Knowledge extends React.Component {
+
+    odjava = () => {
+        document.cookie = "token=; path=/; max-age=-9999999;"
+    }
+
     render() {
         return (
             <Router>
@@ -22,7 +27,7 @@ class Knowledge extends React.Component {
                     <Route path="/knowledge/uposlenici" component={Uposlenici} />
                     <Route path="/" exact component={Login} />
                 </div>
-                <a href="/" className="odjavaLink">Odjava</a>
+                <a href="/" className="odjavaLink" onClick={this.odjava}>Odjava</a>
             </Router>
         )
     }
