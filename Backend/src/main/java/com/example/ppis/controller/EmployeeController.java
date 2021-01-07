@@ -4,10 +4,16 @@ import com.example.ppis.dto.SkillDTO;
 import com.example.ppis.model.Employee;
 import com.example.ppis.model.EmployeeSkill;
 import com.example.ppis.service.EmployeeService;
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Bucket4j;
+import io.github.bucket4j.Refill;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,30 +22,59 @@ public class EmployeeController {
 
     @Autowired
     EmployeeService employeeService;
+    private final Bucket bucket2;
+
+    public EmployeeController() {
+
+        Bandwidth limit2 = Bandwidth.classic(100, Refill.greedy(100, Duration.ofMinutes(1)));
+        this.bucket2 = Bucket4j.builder()
+                .addLimit(limit2)
+                .build();
+    }
 
     @PostMapping("/employees")
     @ResponseStatus(HttpStatus.CREATED)
-    Employee add(@RequestBody Employee employee) throws Exception {
-        return employeeService.add(employee);
+    ResponseEntity<Employee> add(@RequestBody Employee employee) throws Exception {
+        if(bucket2.tryConsume(1)) {
+            return  new ResponseEntity<>(employeeService.add(employee), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
     @DeleteMapping("/employees/{id}")
-    HashMap<String,String> delete(@PathVariable Integer id) throws Exception {
-        return employeeService.delete(id);
+    ResponseEntity<HashMap<String,String>> delete(@PathVariable Integer id) throws Exception {
+        if(bucket2.tryConsume(1)) {
+            return  new ResponseEntity<>(employeeService.delete(id), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
     @GetMapping("/employees")
-    List<Employee> getAll() {
-        return employeeService.getAll();
+    ResponseEntity<List<Employee>> getAll() {
+        if(bucket2.tryConsume(1)) {
+            return  new ResponseEntity<>(employeeService.getAll(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
     @GetMapping("/employees/{id}/skills")
-    List<SkillDTO> getAllSkills(@PathVariable Integer id) throws Exception {
-        return employeeService.getSkillsByEmployee(id);
+    ResponseEntity<List<SkillDTO>> getAllSkills(@PathVariable Integer id) throws Exception {
+        if(bucket2.tryConsume(1)) {
+            return  new ResponseEntity<>(employeeService.getSkillsByEmployee(id), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
     @PostMapping("/employees/{id}/skills")
-    EmployeeSkill addSkillToEmployee(@RequestBody SkillDTO skillDTO, @PathVariable Integer id) throws  Exception {
-        return employeeService.addSkillToEmployee(skillDTO, id);
+    ResponseEntity<EmployeeSkill> addSkillToEmployee(@RequestBody SkillDTO skillDTO, @PathVariable Integer id) throws  Exception {
+        if(bucket2.tryConsume(1)) {
+            return  new ResponseEntity<>(employeeService.addSkillToEmployee(skillDTO, id), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 }
