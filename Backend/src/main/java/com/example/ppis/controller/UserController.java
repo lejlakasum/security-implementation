@@ -1,5 +1,6 @@
 package com.example.ppis.controller;
 
+import com.example.ppis.dto.LoginDto;
 import com.example.ppis.dto.UserDto;
 import com.example.ppis.dto.UserLoginDTO;
 import com.example.ppis.dto.UserRegisterDTO;
@@ -20,7 +21,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/user/login")
-    HashMap<String, String> login(@RequestBody @Valid UserLoginDTO user) throws Exception {
+    LoginDto login(@RequestBody @Valid UserLoginDTO user) throws Exception {
         return userService.login(user);
     }
 

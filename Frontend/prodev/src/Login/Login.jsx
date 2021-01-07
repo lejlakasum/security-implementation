@@ -51,7 +51,7 @@ export class Login extends React.Component {
                 </div>
                 <div className="form">
                     <div className="form-group">
-                        <label htmlFor="username">Korisničko ime</label>
+                        <label htmlFor="username">Email</label>
                         <input type="text" name="username"
                             value={this.state.username}
                             onChange={e => this.handleChange(e)}

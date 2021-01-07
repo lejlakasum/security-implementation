@@ -1,5 +1,6 @@
 package com.example.ppis.service;
 
+import com.example.ppis.dto.LoginDto;
 import com.example.ppis.dto.ResponseMessageDTO;
 import com.example.ppis.dto.UserDto;
 import com.example.ppis.dto.UserLoginDTO;
@@ -9,8 +10,16 @@ import com.example.ppis.model.Role;
 import com.example.ppis.model.User;
 import com.example.ppis.repository.RoleRepository;
 import com.example.ppis.repository.UserRepository;
+import com.example.ppis.security.CustomUserDetails;
+import com.example.ppis.security.JwtUtil;
+import com.example.ppis.security.RepositoryAwareUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -25,35 +34,48 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private RoleRepository roleRepository;
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
-    private List<Role> getRoles(List<UserRoleDTO> roleDTOS) {
-        List<Role> roles = new ArrayList<>();
-        for (UserRoleDTO role: roleDTOS) {
-            Optional<Role> _role = roleRepository.findById(role.getRoleId());
-            _role.ifPresent(roles::add);
-        }
-        return roles;
+    private final AuthenticationManager authenticationManager;
+    private final RepositoryAwareUserDetailsService userDetailsService;
+
+    private final String SECRET_KEY;
+
+    @Autowired
+    public UserService(AuthenticationManager authenticationManager,
+                                 PasswordEncoder passwordEncoder,
+                                 RepositoryAwareUserDetailsService userDetailsService,
+                                 @Value("${secret-key}") String SECRET_KEY) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.SECRET_KEY = SECRET_KEY;
+        this.passwordEncoder=passwordEncoder;
     }
+
 
     private String hashPassword(String password) {
         String hashPassword = passwordEncoder.encode(password);
         return hashPassword;
     }
 
-    private boolean matchPasswords(String plainText, String hashPassword) {
-        return passwordEncoder.matches(plainText, hashPassword);
-    }
-
-    public HashMap<String, String> login(UserLoginDTO user) throws Exception {
-        User userWithEmail = userRepository.findByUsername(user.getUsername());
-
-        if (userWithEmail == null) {
-            throw new Exception("Korisnik s usernameom " + user.getUsername() + " ne postoji");
-        } else if (!matchPasswords(user.getPassword(), userWithEmail.getPassword())) {
-            throw new Exception("Pogresna sifra!");
+    public LoginDto login(UserLoginDTO loginRequest) throws Exception {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())
+            );
         }
-        return new ResponseMessageDTO("Uspjesno ste prijavljeni na sistem").getHashMap();
+        catch (BadCredentialsException e) {
+            throw new Exception("Incorrect username or password", e);
+        }
+        catch (Exception e) {
+            throw e;
+        }
+
+        final CustomUserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
+
+        final String token = JwtUtil.generateToken(userDetails, SECRET_KEY, false);
+
+        return new LoginDto(token);
     }
 
     public UserRegisterDTO postUser(User user) throws Exception {

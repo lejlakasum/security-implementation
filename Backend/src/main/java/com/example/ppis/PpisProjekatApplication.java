@@ -1,7 +1,9 @@
 package com.example.ppis;
 
+import com.example.ppis.dto.UserRegisterDTO;
 import com.example.ppis.model.*;
 import com.example.ppis.repository.*;
+import com.example.ppis.service.UserService;
 import org.apache.catalina.Context;
 import org.apache.catalina.connector.Connector;
 import org.apache.tomcat.util.descriptor.web.SecurityCollection;
@@ -56,7 +58,7 @@ public class PpisProjekatApplication {
 	}
 
 	@Bean
-	public CommandLineRunner addData(UserRepository userRepository,
+	public CommandLineRunner addData(UserService userRepository,
 									 RoleRepository roleRepository,
 									 SkillTypeRepository skillTypeRepository,
 									 SkillRepository skillRepository,
@@ -66,22 +68,12 @@ public class PpisProjekatApplication {
 		return(args) -> {
 			Role role1 = roleRepository.save(new Role("admin"));
 			Role role2 = roleRepository.save(new Role("hr"));
-			log.info("Sve uloge \n");
-			for (Role role : roleRepository.findAll()) {
-				log.info(role.getName());
-			}
-			log.info(" ");
+
 
 			// korisnici
 
-			User k1 = userRepository.save(new User("admin", "$2y$12$d.WC//FFyNCsaGzHJhalAuH6EMbmKaPDHUWxGhiQvoghruwrUUjCm", "ante.antic@gmail.com", role1));
+			UserRegisterDTO k1 = userRepository.postUser(new User("admin", "password", "ante.antic@gmail.com", role1));
 
-
-			log.info("Svi korisnici \n");
-			for (User user : userRepository.findAll()) {
-				log.info(user.getUsername());
-			}
-			log.info(" ");
 
 			//tipovi skilova
 			List<SkillType> skillTypes = new ArrayList<>();
@@ -89,11 +81,6 @@ public class PpisProjekatApplication {
 			SkillType skillType2 = skillTypeRepository.save(new SkillType("Soft vještine"));
 			SkillType skillType3 = skillTypeRepository.save(new SkillType("Mreže"));
 
-			log.info("Svi tipovi vještina \n");
-			for (SkillType skillType : skillTypeRepository.findAll()) {
-				log.info(skillType.getName());
-			}
-			log.info(" ");
 
 			//vještine
 			Skill skill1 = skillRepository.save(new Skill("Java programiranje", skillType1));
@@ -106,11 +93,7 @@ public class PpisProjekatApplication {
 			Skill skill8 = skillRepository.save(new Skill("Komunikacione vještine", skillType2));
 			Skill skill9 = skillRepository.save(new Skill("Liderstvo", skillType2));
 
-			log.info("Sve vještine \n");
-			for (Skill skill : skillRepository.findAll()) {
-				log.info(skill.getName() + " Tip vještine: " + skill.getSkillType().getName());
-			}
-			log.info(" ");
+
 
 			//uposlenici
 			Employee employee1 = employeeRepository.save(new Employee("Ivo", "Ivic", new Date(), new Date()));
@@ -118,11 +101,7 @@ public class PpisProjekatApplication {
 			Employee employee3 = employeeRepository.save(new Employee("Stevo", "Stevic", new Date(), new Date()));
 			Employee employee4 = employeeRepository.save(new Employee("Ahmo", "Ahmic", new Date(), new Date()));
 
-			log.info("Svi uposlenici \n");
-			for (Employee employee : employeeRepository.findAll()) {
-				log.info(employee.getFirstName() + " " + employee.getLastName());
-			}
-			log.info(" ");
+
 
 			//skillovi kod uposlenika
 
@@ -141,11 +120,6 @@ public class PpisProjekatApplication {
 			EmployeeSkill employeeSkill9 = employeeSkillRepository.save(new EmployeeSkill(employee4, skill7, 3, new Date()));
 			EmployeeSkill employeeSkill10 = employeeSkillRepository.save(new EmployeeSkill(employee4, skill8, 4, new Date()));
 
-			log.info("Svi skilovi uposlenika \n");
-			for (EmployeeSkill employeeSkill : employeeSkillRepository.findAll()) {
-				log.info(employeeSkill.getSkill().getName());
-			}
-			log.info(" ");
 
 			//Svi certifikati
 
