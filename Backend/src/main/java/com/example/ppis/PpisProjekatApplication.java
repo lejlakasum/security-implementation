@@ -2,11 +2,17 @@ package com.example.ppis;
 
 import com.example.ppis.model.*;
 import com.example.ppis.repository.*;
+import org.apache.catalina.Context;
+import org.apache.catalina.connector.Connector;
+import org.apache.tomcat.util.descriptor.web.SecurityCollection;
+import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
@@ -22,6 +28,33 @@ public class PpisProjekatApplication {
 		SpringApplication.run(PpisProjekatApplication.class, args);
 	}
 
+
+	@Bean
+	public ServletWebServerFactory servletContainer() {
+		TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
+			@Override
+			protected void postProcessContext(Context context) {
+				SecurityConstraint securityConstraint = new SecurityConstraint();
+				securityConstraint.setUserConstraint("CONFIDENTIAL");
+				SecurityCollection collection = new SecurityCollection();
+				collection.addPattern("/*");
+				securityConstraint.addCollection(collection);
+				context.addConstraint(securityConstraint);
+			}
+		};
+		tomcat.addAdditionalTomcatConnectors(getHttpConnector());
+		return tomcat;
+	}
+
+	private Connector getHttpConnector() {
+		Connector connector = new Connector(TomcatServletWebServerFactory.DEFAULT_PROTOCOL);
+		connector.setScheme("http");
+		connector.setPort(8083);
+		connector.setSecure(false);
+		connector.setRedirectPort(8443);
+		return connector;
+	}
+
 	@Bean
 	public CommandLineRunner addData(UserRepository userRepository,
 									 RoleRepository roleRepository,
@@ -31,9 +64,8 @@ public class PpisProjekatApplication {
 									 EmployeeSkillRepository employeeSkillRepository,
 									 CertificateRepository certificateRepository) {
 		return(args) -> {
-			Role role1 = roleRepository.save(new Role("administrator"));
-			Role role2 = roleRepository.save(new Role("hr_manager"));
-			Role role3 = roleRepository.save(new Role("suplier_manager"));
+			Role role1 = roleRepository.save(new Role("admin"));
+			Role role2 = roleRepository.save(new Role("hr"));
 			log.info("Sve uloge \n");
 			for (Role role : roleRepository.findAll()) {
 				log.info(role.getName());

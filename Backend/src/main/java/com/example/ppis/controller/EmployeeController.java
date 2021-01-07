@@ -23,11 +23,6 @@ public class EmployeeController {
         return employeeService.add(employee);
     }
 
-    @PutMapping("/employees")
-    Employee update(@RequestBody Employee newEmployee) throws Exception {
-        return employeeService.update(newEmployee, newEmployee.getId());
-    }
-
     @DeleteMapping("/employees/{id}")
     HashMap<String,String> delete(@PathVariable Integer id) throws Exception {
         return employeeService.delete(id);

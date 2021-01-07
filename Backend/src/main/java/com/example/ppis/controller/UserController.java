@@ -1,5 +1,6 @@
 package com.example.ppis.controller;
 
+import com.example.ppis.dto.UserDto;
 import com.example.ppis.dto.UserLoginDTO;
 import com.example.ppis.dto.UserRegisterDTO;
 import com.example.ppis.model.User;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/user/all")
-    List<User> allUsers() throws Exception {
+    List<UserDto> allUsers() throws Exception {
         return userService.getListOfUsers();
     }
 

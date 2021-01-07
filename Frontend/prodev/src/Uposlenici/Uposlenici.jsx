@@ -45,7 +45,7 @@ export class Uposlenici extends Component {
     }
 
     componentWillMount() {
-        axios.get('http://localhost:8083/skills')
+        axios.get('https://localhost:8443/skills')
             .then(res => {
                 var temp = [];
                 for (var i = 0; i < res.data.length; i++) {
@@ -54,7 +54,7 @@ export class Uposlenici extends Component {
                 this.setState({ vjestine: temp });
             })
 
-        axios.get('http://localhost:8083/employees')
+        axios.get('https://localhost:8443/employees')
             .then(res => {
                 const sviUposlenici = res.data;
                 this.setState({ sviUposlenici });
@@ -87,31 +87,31 @@ export class Uposlenici extends Component {
 
     kreirajUposlenika = () => {
 
-        
-                axios.post('http://localhost:8083/employees', {
-                    firstName: this.state.ime,
-                    lastName: this.state.prezime,
-                    dateOfEmployment: this.state.zaposlenje,
-                    birthDate: this.state.rodjenje
-                }).then(response => {
-                    if (response.status === 201 || response.status === 200) alert("Uposlenik uspješno registrovan!")
-                }).catch(err => {
-                    alert(err.response.data.errors)
-                })
 
-                /*
-                var TEMP = [...this.state.sviUposlenici];
-                const temp = {
-                    firstName: this.state.ime,
-                    lastName: this.state.prezime,
-                    dateOfEmployment: tempZaposlenje,
-                    birthDate: tempRodjenje,
-                    educations: [this.state.podaciOEdukaciji],
-                    obrisati: false
-                }
-                TEMP.push(temp);
-                this.setState({sviUposlenici:TEMP})   */
-            
+        axios.post('http://localhost:8083/employees', {
+            firstName: this.state.ime,
+            lastName: this.state.prezime,
+            dateOfEmployment: this.state.zaposlenje,
+            birthDate: this.state.rodjenje
+        }).then(response => {
+            if (response.status === 201 || response.status === 200) alert("Uposlenik uspješno registrovan!")
+        }).catch(err => {
+            alert(err.response.data.errors)
+        })
+
+        /*
+        var TEMP = [...this.state.sviUposlenici];
+        const temp = {
+            firstName: this.state.ime,
+            lastName: this.state.prezime,
+            dateOfEmployment: tempZaposlenje,
+            birthDate: tempRodjenje,
+            educations: [this.state.podaciOEdukaciji],
+            obrisati: false
+        }
+        TEMP.push(temp);
+        this.setState({sviUposlenici:TEMP})   */
+
     }
 
     unosNovog = (e) => {
@@ -223,7 +223,7 @@ export class Uposlenici extends Component {
     showDetails(id) {
         this.setState({ modalIsOpen: true })
 
-        var url = 'http://localhost:8083/employees/' + id + '/skills'
+        var url = 'https://localhost:8443/employees/' + id + '/skills'
         axios.get(url)
             .then(res => {
                 const temp = res.data;

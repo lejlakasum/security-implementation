@@ -22,10 +22,6 @@ public class SkillController {
         return skillService.add(skill);
     }
 
-    @PutMapping("/skills")
-    Skill update(@RequestBody Skill newSkill) throws Exception {
-        return skillService.update(newSkill, newSkill.getId());
-    }
 
     @DeleteMapping("/skills/{id}")
     HashMap<String,String> delete(@PathVariable Integer id) throws Exception {

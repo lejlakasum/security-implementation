@@ -1,6 +1,7 @@
 package com.example.ppis.service;
 
 import com.example.ppis.dto.ResponseMessageDTO;
+import com.example.ppis.dto.UserDto;
 import com.example.ppis.dto.UserLoginDTO;
 import com.example.ppis.dto.UserRegisterDTO;
 import com.example.ppis.dto.UserRoleDTO;
@@ -89,12 +90,16 @@ public class UserService {
         return new ResponseMessageDTO("Uspjesno obrisan korisnik sa id-em " + id).getHashMap();
     }
 
-    public List<User> getListOfUsers() throws Exception {
+    public List<UserDto> getListOfUsers() throws Exception {
         if (userRepository.count() == 0) {
             throw new Exception("Nema korisnika u bazi");
         }
         List<User> sviKorisnici = new ArrayList<>();
-        userRepository.findAll().forEach(sviKorisnici::add);
-        return sviKorisnici;
+        List<UserDto> novaLista = new ArrayList<>();
+         userRepository.findAll().forEach(sviKorisnici::add);
+        for(User user : sviKorisnici) {
+           novaLista.add(new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getRole()));
+        }
+        return novaLista;
     }
 }

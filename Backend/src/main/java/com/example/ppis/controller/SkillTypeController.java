@@ -19,22 +19,6 @@ public class SkillTypeController {
     @Autowired
     SkillTypeService skillTypeService;
 
-    @PostMapping("/skill-types")
-    @ResponseStatus(HttpStatus.CREATED)
-    SkillType add(@RequestBody SkillType skillType) {
-        return skillTypeService.add(skillType);
-    }
-
-    @PutMapping("/skill-types")
-    SkillType update(@RequestBody SkillType newSkillType) throws Exception {
-        return skillTypeService.update(newSkillType, newSkillType.getId());
-    }
-
-    @DeleteMapping("/skill-types/{id}")
-    HashMap<String,String> delete(@PathVariable Integer id) throws Exception {
-        return skillTypeService.delete(id);
-    }
-
     @GetMapping("/skill-types")
     List<SkillType> getAll() {
         return skillTypeService.getAll();

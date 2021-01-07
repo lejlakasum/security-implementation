@@ -13,8 +13,8 @@ function App() {
     <Router>
       <div className="App">
         <Route path="/" exact component={Login} />
-        <PrivateRoute path="/admin" component={Admin} />
-        <PrivateRoute path="/knowledge" component={Knowledge} />
+        <Route path="/admin" component={Admin} />
+        <Route path="/knowledge" component={Knowledge} />
       </div>
     </Router>
   );
