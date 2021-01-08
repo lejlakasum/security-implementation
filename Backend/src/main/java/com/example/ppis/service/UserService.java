@@ -1,5 +1,6 @@
 package com.example.ppis.service;
 
+import com.example.ppis.dto.ChangePasswordDto;
 import com.example.ppis.dto.LoginDto;
 import com.example.ppis.dto.ResponseMessageDTO;
 import com.example.ppis.dto.UserDto;
@@ -13,6 +14,7 @@ import com.example.ppis.repository.UserRepository;
 import com.example.ppis.security.CustomUserDetails;
 import com.example.ppis.security.JwtUtil;
 import com.example.ppis.security.RepositoryAwareUserDetailsService;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -121,6 +123,7 @@ public class UserService {
 
         user.setRole(role);
         user.setPassword(hashPassword(user.getPassword()));
+        user.setDefaultPassword(true);
 
         User newUser =  userRepository.save(user);
 
@@ -153,8 +156,39 @@ public class UserService {
         List<UserDto> novaLista = new ArrayList<>();
          userRepository.findAll().forEach(sviKorisnici::add);
         for(User user : sviKorisnici) {
-           novaLista.add(new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getRole()));
+           novaLista.add(new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getDefaultPassword()));
         }
         return novaLista;
+    }
+
+    public UserDto changePassword(ChangePasswordDto changePasswordDto) throws Exception {
+        User user = userRepository.findByEmail(changePasswordDto.getEmail());
+
+        if(user == null) {
+            throw new NotFoundException("User does not exists");
+        }
+
+        if(!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword())) {
+            throw new Exception("Incorect old password");
+        }
+
+        user.setPassword(hashPassword(changePasswordDto.getNewPassword()));
+        user.setDefaultPassword(false);
+
+        User updatedUser = userRepository.save(user);
+
+        return new UserDto(updatedUser.getId(), updatedUser.getUsername(), updatedUser.getEmail(), updatedUser.getRole(), updatedUser.getDefaultPassword());
+    }
+
+    public UserDto getUserByEmail(String email, String token) throws Exception {
+        User user = userRepository.findByEmail(email);
+
+        token = token.split(" ")[1];
+
+        if(!JwtUtil.extractUsername(token, SECRET_KEY).equals(user.getEmail())) {
+            throw new Exception("Unauthorized");
+        }
+
+        return new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getRole(), user.getDefaultPassword());
     }
 }

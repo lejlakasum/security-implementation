@@ -13,14 +13,17 @@ public class UserDto {
 
     private Role role;
 
+    private Boolean defaultPassword;
+
     public UserDto() {
     }
 
-    public UserDto(Integer id, String username, String email, Role role) {
+    public UserDto(Integer id, String username, String email, Role role, Boolean defaultPassword) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.role = role;
+        this.defaultPassword = defaultPassword;
     }
 
     public Integer getId() {
@@ -53,5 +56,13 @@ public class UserDto {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getDefaultPassword() {
+        return defaultPassword;
+    }
+
+    public void setDefaultPassword(Boolean defaultPassword) {
+        this.defaultPassword = defaultPassword;
     }
 }

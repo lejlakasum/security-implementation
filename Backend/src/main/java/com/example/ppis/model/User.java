@@ -16,19 +16,21 @@ public class User {
 
     private String password;
 
-
     private String email;
 
     @ManyToOne
     private Role role;
 
+    private Boolean defaultPassword;
+
     public User() {}
 
-    public User(String username, String password,String email, Role role) {
+    public User(String username, String password,String email, Role role, Boolean defaultPassword) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.role = role;
+        this.defaultPassword = defaultPassword;
     }
 
     public Integer getId() {
@@ -69,6 +71,14 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Boolean getDefaultPassword() {
+        return defaultPassword;
+    }
+
+    public void setDefaultPassword(Boolean defaultPassword) {
+        this.defaultPassword = defaultPassword;
     }
 
     @Override

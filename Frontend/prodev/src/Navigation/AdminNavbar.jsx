@@ -19,6 +19,9 @@ class AdminNavbar extends React.Component {
                     <Link to="/admin/uposlenici">
                         <li>Uposlenici</li>
                     </Link>
+                    <Link to="/admin/change-password">
+                        <li>Promijeni password</li>
+                    </Link>
                 </ul>
             </nav>
         )

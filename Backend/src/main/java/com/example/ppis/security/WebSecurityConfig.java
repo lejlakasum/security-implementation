@@ -62,6 +62,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .hasAuthority("admin")
                 .antMatchers(HttpMethod.DELETE, "/user/{id}")
                 .hasAuthority("admin")
+                .antMatchers(HttpMethod.POST, "/user/change-password")
+                .hasAnyAuthority("admin", "hr")
+                .antMatchers(HttpMethod.GET, "/user/{email}")
+                .hasAnyAuthority("admin", "hr")
 
                 .antMatchers(HttpMethod.GET, "/skill-types")
                 .hasAuthority("hr")

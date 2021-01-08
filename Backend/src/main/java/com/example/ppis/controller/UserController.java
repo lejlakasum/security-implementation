@@ -1,5 +1,6 @@
 package com.example.ppis.controller;
 
+import com.example.ppis.dto.ChangePasswordDto;
 import com.example.ppis.dto.LoginDto;
 import com.example.ppis.dto.UserDto;
 import com.example.ppis.dto.UserLoginDTO;
@@ -10,6 +11,7 @@ import io.github.bucket4j.Bandwidth;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.Bucket4j;
 import io.github.bucket4j.Refill;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import javax.validation.Valid;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 public class UserController {
@@ -85,6 +88,37 @@ public class UserController {
         catch (Exception ex) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PostMapping("/user/change-password")
+    ResponseEntity<UserDto> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        if(bucket2.tryConsume(1)) {
+            try {
+                return new ResponseEntity<>(userService.changePassword(changePasswordDto), HttpStatus.OK);
+            }
+            catch (NotFoundException ex) {
+               return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            catch (Exception ex) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
+    }
+
+    @GetMapping("/user/{email}")
+    ResponseEntity<UserDto> getUserByEmail(@PathVariable String email, @RequestHeader("Authorization") String token) {
+        if(bucket2.tryConsume(1)) {
+            try {
+                return new ResponseEntity<>(userService.getUserByEmail(email, token) ,HttpStatus.OK);
+            }
+            catch (Exception ex) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+        }
+
+        return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
 }

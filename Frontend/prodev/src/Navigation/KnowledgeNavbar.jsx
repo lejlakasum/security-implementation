@@ -28,6 +28,9 @@ export class KnowledgeNavbar extends Component {
                     <Link to="/knowledge/uposlenici">
                         <li>Uposlenici</li>
                     </Link>
+                    <Link to="/knowledge/change-password">
+                        <li>Promijeni password</li>
+                    </Link>
                 </ul>
             </nav>
         )

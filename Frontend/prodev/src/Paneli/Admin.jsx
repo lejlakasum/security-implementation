@@ -7,6 +7,7 @@ import AdminNavbar from '../Navigation/AdminNavbar'
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import './style.scss';
 import { UposleniciAdmin } from "../UposleniciAdmin/UposleniciAdmin";
+import ChangePassword from "../ChangePassword/ChangePassword";
 
 class Admin extends React.Component {
 
@@ -21,6 +22,7 @@ class Admin extends React.Component {
                     <AdminNavbar />
                     <Route path="/admin/korisnici" component={Korisnici} />
                     <Route path="/admin/uposlenici" component={UposleniciAdmin} />
+                    <Route path="/admin/change-password" component={ChangePassword} />
                     <Route path="/" exact component={Login} />
                 </div>
                 <a href="/" className="odjavaLink" onClick={this.odjava}>Odjava</a>
