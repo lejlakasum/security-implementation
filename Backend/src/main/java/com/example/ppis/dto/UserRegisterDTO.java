@@ -8,11 +8,11 @@ import java.util.List;
 
 public class UserRegisterDTO {
 
-    String username;
+    private String username;
 
-    String email;
+    private String email;
 
-    UserRoleDTO role;
+    private UserRoleDTO role;
 
     public UserRegisterDTO() {}
 

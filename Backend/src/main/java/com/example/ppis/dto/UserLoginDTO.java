@@ -1,12 +1,15 @@
 package com.example.ppis.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 public class UserLoginDTO {
 
-    String username;
+    private String username;
 
-    String password;
+    private String password;
 
     public UserLoginDTO() {}
 

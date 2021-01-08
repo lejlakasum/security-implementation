@@ -1,11 +1,27 @@
 package com.example.ppis.dto;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 public class ChangePasswordDto {
 
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private String oldPassword;
 
+    @NotEmpty
+    @NotBlank
+    @NotNull
+    @Pattern(regexp = "^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!{}<>@^*()_=;:'\\-#$%&? \"]).*$")
     private String newPassword;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    @Pattern(regexp = "^(([^<>()\\\\.,;:\\s@\"]+(\\.[^<>()\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$")
     private String email;
 
     public ChangePasswordDto() {
