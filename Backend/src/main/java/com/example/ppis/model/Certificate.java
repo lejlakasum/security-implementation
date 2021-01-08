@@ -1,6 +1,12 @@
 package com.example.ppis.model;
 
+import org.aspectj.lang.annotation.Before;
+
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -17,7 +23,11 @@ public class Certificate {
     @ManyToOne
     private Skill skillOnCetrificate;
 
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private String name;
+
 
     private Date dateOfIssue;
 

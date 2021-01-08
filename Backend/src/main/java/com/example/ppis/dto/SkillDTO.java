@@ -2,12 +2,16 @@ package com.example.ppis.dto;
 
 import com.example.ppis.model.Skill;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class SkillDTO {
 
+    @NotNull
     private Skill skill;
 
+    @NotNull
     private Integer skillLevel;
 
     private Date dateCreated;
