@@ -10,11 +10,31 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom"
 import { DodavanjeVjestine } from "../DodavanjeVjestine/index"
 import './style.scss';
 import ChangePassword from "../ChangePassword/ChangePassword";
+import axios from "axios"
+import getUserFromToken from "../Util/getUserFromToken";
+import getBaseUrl from "../Util/getBaseUrl";
 
 class Knowledge extends React.Component {
 
     odjava = () => {
         document.cookie = "token=; path=/; max-age=-9999999;"
+    }
+
+    componentWillMount() {
+
+        var route = getBaseUrl() + '/user/' + getUserFromToken().email
+        axios.get(route)
+            .then(response => {
+                console.log(response)
+                if (response.status == 401) {
+                    alert("nedozvoljena radnja")
+                }
+                else if (response.status == 200) {
+                    if (response.data.defaultPassword) {
+                        alert("Vaš trenutni password je unaprijed zadan. Promijenite password!")
+                    }
+                }
+            })
     }
 
     render() {
