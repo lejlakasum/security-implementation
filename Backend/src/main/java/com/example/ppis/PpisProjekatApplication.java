@@ -17,6 +17,8 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -97,10 +99,10 @@ public class PpisProjekatApplication {
 
 
 			//uposlenici
-			Employee employee1 = employeeRepository.save(new Employee("Ivo", "Ivic", new Date(), new Date()));
-			Employee employee2 = employeeRepository.save(new Employee("Maja", "Majic", new Date(), new Date()));
-			Employee employee3 = employeeRepository.save(new Employee("Stevo", "Stevic", new Date(), new Date()));
-			Employee employee4 = employeeRepository.save(new Employee("Ahmo", "Ahmic", new Date(), new Date()));
+			Employee employee1 = employeeRepository.save(new Employee("Ivo", "Ivic", Date.from(LocalDateTime.now().minusDays(1).toInstant(ZoneOffset.UTC)), new Date()));
+			Employee employee2 = employeeRepository.save(new Employee("Maja", "Majic", Date.from(LocalDateTime.now().minusDays(2).toInstant(ZoneOffset.UTC)), new Date()));
+			Employee employee3 = employeeRepository.save(new Employee("Stevo", "Stevic", Date.from(LocalDateTime.now().minusDays(3).toInstant(ZoneOffset.UTC)), new Date()));
+			Employee employee4 = employeeRepository.save(new Employee("Ahmo", "Ahmic", Date.from(LocalDateTime.now().minusDays(4).toInstant(ZoneOffset.UTC)), new Date()));
 
 
 

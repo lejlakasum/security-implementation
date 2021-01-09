@@ -36,7 +36,7 @@ public class CertificateController {
     @PostMapping("/certificate")
     @ResponseStatus(HttpStatus.CREATED)
     @Valid
-    ResponseEntity<Certificate> add(@RequestBody @Valid Certificate certificate) {
+    ResponseEntity<Certificate> add(@RequestBody @Valid Certificate certificate) throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(certificateService.addCertificate(certificate), HttpStatus.OK);
         }

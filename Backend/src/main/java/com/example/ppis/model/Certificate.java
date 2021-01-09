@@ -3,10 +3,7 @@ package com.example.ppis.model;
 import org.aspectj.lang.annotation.Before;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Date;
 
 @Entity
@@ -26,6 +23,7 @@ public class Certificate {
     @NotNull
     @NotEmpty
     @NotBlank
+    @Size(min = 2,max = 60)
     private String name;
 
 
