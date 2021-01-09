@@ -51,6 +51,7 @@ public class UserController {
     }
 
     @PostMapping("/user/register")
+    @Valid
     ResponseEntity<UserRegisterDTO> register(@RequestBody @Valid User user) throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(userService.postUser(user), HttpStatus.OK);
@@ -80,7 +81,8 @@ public class UserController {
     }
 
     @PostMapping("/user/validate")
-    ResponseEntity<Void> validateToken(@RequestBody LoginDto request, @RequestParam String role) {
+    @Valid
+    ResponseEntity<Void> validateToken(@RequestBody @Valid LoginDto request, @RequestParam String role) {
         try {
             userService.validateToken(request.token, role);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -91,7 +93,8 @@ public class UserController {
     }
 
     @PostMapping("/user/change-password")
-    ResponseEntity<UserDto> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+    @Valid
+    ResponseEntity<UserDto> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto) {
         if(bucket2.tryConsume(1)) {
             try {
                 return new ResponseEntity<>(userService.changePassword(changePasswordDto), HttpStatus.OK);

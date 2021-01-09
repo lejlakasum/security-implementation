@@ -1,6 +1,9 @@
 package com.example.ppis.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
@@ -12,13 +15,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotNull
+    @NotEmpty
+    @NotBlank
     private String username;
 
+    @NotEmpty
+    @NotBlank
+    @NotNull
+    @Pattern(regexp = "^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!{}<>@^*()_=;:'\\-#$%&? \"]).*$")
     private String password;
 
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    @Pattern(regexp = "^(([^<>()\\\\.,;:\\s@\"]+(\\.[^<>()\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$")
     private String email;
 
     @ManyToOne
+    @NotNull
     private Role role;
 
     private Boolean defaultPassword;

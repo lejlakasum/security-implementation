@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +35,8 @@ public class EmployeeController {
 
     @PostMapping("/employees")
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Employee> add(@RequestBody Employee employee) throws Exception {
+    @Valid
+    ResponseEntity<Employee> add(@RequestBody @Valid Employee employee) throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(employeeService.add(employee), HttpStatus.OK);
         }
@@ -70,7 +72,8 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/{id}/skills")
-    ResponseEntity<EmployeeSkill> addSkillToEmployee(@RequestBody SkillDTO skillDTO, @PathVariable Integer id) throws  Exception {
+    @Valid
+    ResponseEntity<EmployeeSkill> addSkillToEmployee(@RequestBody @Valid SkillDTO skillDTO, @PathVariable Integer id) throws  Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(employeeService.addSkillToEmployee(skillDTO, id), HttpStatus.OK);
         }

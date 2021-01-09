@@ -1,13 +1,15 @@
 package com.example.ppis.dto;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class UserRoleDTO {
 
     @NotBlank
-    Integer roleId;
+    @NotNull
+    private Integer roleId;
 
-    String name;
+    private String name;
 
     public UserRoleDTO() {}
 

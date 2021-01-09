@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.Duration;
 import java.util.List;
 
@@ -34,7 +35,8 @@ public class CertificateController {
 
     @PostMapping("/certificate")
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Certificate> add(@RequestBody Certificate certificate) {
+    @Valid
+    ResponseEntity<Certificate> add(@RequestBody @Valid Certificate certificate) {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(certificateService.addCertificate(certificate), HttpStatus.OK);
         }

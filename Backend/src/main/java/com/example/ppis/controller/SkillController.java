@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,8 @@ public class SkillController {
 
     @PostMapping("/skills")
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Skill> add(@RequestBody Skill skill) throws Exception {
+    @Valid
+    ResponseEntity<Skill> add(@RequestBody @Valid Skill skill) throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(skillService.add(skill), HttpStatus.OK);
         }
