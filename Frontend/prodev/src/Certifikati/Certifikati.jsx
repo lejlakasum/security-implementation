@@ -17,8 +17,8 @@ export class Certifikati extends Component {
             uposlenikCertifikata: [], // Za dobavljanje korisnika za kojeg je certifikat
             vjestinaCertifikata: [], // Za dobavljanje vjestine za koju je certfikat
             ime: '',
-            izdavanje: '',
-            istek: '',
+            izdavanje: new Date(),
+            istek: new Date(),
             vjestina: '',
             uposlenik: '',
             temp: '',
@@ -99,6 +99,34 @@ export class Certifikati extends Component {
             if (this.state.uposlenici[i].value === this.state.uposlenik) idUposlenika = this.state.uposlenici[i].id;
         }
 
+        var reg = /^[A-Za-z0-9\s\-]*$/g
+        if (!this.state.ime || this.state.ime.trim().length == 0 || !reg.test(this.state.ime)) {
+            alert("Unesite ispravno ime")
+            return
+        }
+        if (!this.state.izdavanje || this.state.izdavanje == "") {
+            alert("Odaberite datum izdavanja")
+            return
+        }
+        if (!this.state.istek || this.state.istek == "") {
+            alert("Odaberite datum isteka")
+            return
+        }
+        if (this.state.izdavanje >= this.state.istek) {
+            alert("Datum isteka mora biti nakon datuma izdavanja")
+            return
+        }
+
+        if (this.state.uposlenik == "") {
+            alert("Odaberite uposlenika")
+            return
+        }
+
+        if (this.state.vjestina == "") {
+            alert("Odaberite vjestinu")
+            return
+        }
+
         axios.post(getBaseUrl() + '/certificate', {
             dateOfIssue: this.state.izdavanje,
             empolyeeOnCrtificate: this.state.uposlenikCertifikata[idUposlenika - 1],
@@ -106,22 +134,16 @@ export class Certifikati extends Component {
             name: this.state.ime,
             skillOnCetrificate: this.state.vjestinaCertifikata[idVjestine - 1]
 
-        }).catch(err => {
-            console.log(err.response.data.message)
         })
+            .then(response => {
+                alert("Certifikat uspješno registrovan!")
+                window.location.href = "/knowledge/certifikati"
+            })
+            .catch(err => {
+                console.log(err.response.data.message)
+            })
 
-        var TEMP = [...this.state.Certifikati];
-        const temp = {
-            dateOfIssue: this.state.izdavanje,
-            empolyeeOnCrtificate: [this.state.uposlenikCertifikata[idUposlenika - 1]],
-            expireDate: this.state.istek,
-            name: this.state.ime,
-            skillOnCetrificate: [this.state.vjestinaCertifikata[idVjestine - 1]],
-            obrisati: false
-        }
-        TEMP.push(temp);
-        this.setState({ Certifikati: TEMP })
-        alert("Certifikat uspješno registrovan!")
+
     }
 
     handleChangeUposlenik = (selectedOption) => {

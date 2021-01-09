@@ -11,7 +11,7 @@ export class UposleniciAdmin extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            HeaderTabele: [{ Ime: '', Prezime: '', Datum_Rođenja: '', Datum_Zaposlenja: '', Detalji: '', brisati: false }],
+            HeaderTabele: [{ Ime: '', Prezime: '', Datum_Rođenja: '', Datum_Zaposlenja: '', Detalji: '' }],
             headerVjestine: [
                 { tip: "", vjestina: "", level: "", datum: "" },
             ],
@@ -176,16 +176,7 @@ export class UposleniciAdmin extends Component {
                     <td>{birthDate.split('T')[0]}</td>
                     <td>{dateOfEmployment.split('T')[0]}</td>
                     <td><button onClick={e => this.showDetails(id)} > Detalji</button></td>
-                    <td>{brisati}
-                        <div className="brisanje">
-                            <label>
-                                <input type="checkbox"
-                                    brisati={this.state.checked}
-                                    onChange={e => this.handleChange(e, index)}
-                                />
-                            </label>
-                        </div>
-                    </td>
+
                 </tr>
             )
         })
@@ -338,9 +329,6 @@ export class UposleniciAdmin extends Component {
                         </tbody>
                     </table>
                     <div className="footerUposlenici">
-                        <button type="button" className="btnObrisiUposlenika" onClick={this.obrisiUposlenika}>
-                            Obriši uposlenika
-                    </button>
                     </div>
                 </div>
 

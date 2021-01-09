@@ -29,8 +29,8 @@ export class Uposlenici extends Component {
             idVjestine: '', // ID za odabrani tip vjestine
             ime: '',
             prezime: '',
-            zaposlenje: '',
-            rodjenje: '',
+            zaposlenje: new Date(),
+            rodjenje: new Date(),
             edukacija: '',
             podaciOEdukaciji: [],
             startDate: new Date(),
@@ -88,6 +88,25 @@ export class Uposlenici extends Component {
 
     kreirajUposlenika = () => {
 
+        var reg = /^[A-Za-z0-9\s\-]*$/g
+        if (!this.state.ime || this.state.ime.trim().length == 0 || !reg.test(this.state.ime)) {
+            alert("Unesite ispravno ime")
+            return
+        }
+
+        var reg2 = /^[A-Za-z0-9\s\-]*$/g
+        if (!this.state.prezime || this.state.prezime.trim().length == 0 || !reg2.test(this.state.prezime)) {
+            alert("Unesite ispravno prezime")
+            return
+        }
+        if (this.state.rodjenje >= new Date()) {
+            alert("Datum rodjenja mora biti u proslosti")
+            return
+        }
+        if (this.state.zaposlenje >= new Date()) {
+            alert("Datum zaposlenja mora biti u proslosti")
+            return
+        }
 
         axios.post(getBaseUrl() + '/employees', {
             firstName: this.state.ime,
@@ -95,23 +114,14 @@ export class Uposlenici extends Component {
             dateOfEmployment: this.state.zaposlenje,
             birthDate: this.state.rodjenje
         }).then(response => {
-            if (response.status === 201 || response.status === 200) alert("Uposlenik uspješno registrovan!")
-        }).catch(err => {
-            alert(err.response.data.errors)
-        })
+            if (response.status === 201 || response.status === 200) {
+                alert("Uposlenik uspješno registrovan!")
+                window.location.href = "/knowledge/uposlenici"
+            }
 
-        /*
-        var TEMP = [...this.state.sviUposlenici];
-        const temp = {
-            firstName: this.state.ime,
-            lastName: this.state.prezime,
-            dateOfEmployment: tempZaposlenje,
-            birthDate: tempRodjenje,
-            educations: [this.state.podaciOEdukaciji],
-            obrisati: false
-        }
-        TEMP.push(temp);
-        this.setState({sviUposlenici:TEMP})   */
+        }).catch(err => {
+
+        })
 
     }
 
@@ -214,6 +224,7 @@ export class Uposlenici extends Component {
                 }
                 alert("Uspješno obrisan uposlenik!");
                 this.setState({ sviUposlenici: TEMP })
+                window.location.href = "/knowledge/uposlenici"
             }).catch(err => {
                 console.log(err.response.data.errors)
             })

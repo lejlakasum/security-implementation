@@ -11,7 +11,7 @@ export class Korisnici extends Component {
             Header: [
                 { Username: "", Email: "", uloga: "", obrisati: false }
             ],
-            options: [],
+            options: ["admin", "hr"],
             temp: '',
             email: '',
             username: '',
@@ -32,16 +32,6 @@ export class Korisnici extends Component {
                 const Korisnici = res.data;
                 this.setState({ Korisnici });
             })
-        axios.get(getBaseUrl() + '/role/all')
-            .then(res => {
-                var temp = [];
-                for (var i = 0; i < res.data.length; i++) {
-                    temp.push({ name: `${res.data[i].name}`, value: res.data[i].name, id: res.data[i].id });
-
-                }
-                this.setState({ options: temp });
-            })
-
     }
 
     obrisiKorisnika = () => {
@@ -57,14 +47,31 @@ export class Korisnici extends Component {
     }
 
     kreirajKorisnika = () => {
-        var idUloge = ''
-        for (var i = 0; i < this.state.options.length; i++) {
-            console.log(this.state.options[i])
-            console.log("Odabrani " + this.state.tipUloge)
-            if (this.state.options[i].value === this.state.tipUloge) {
-                idUloge = this.state.options[i].id;
-                break;
-            }
+
+        var idUloge = 1
+        if (this.state.tipUloge == "hr") {
+            idUloge = 2
+        }
+
+        if (this.state.username.length < 2 || this.state.username.length > 30 || !this.state.username || this.state.username.trim().length == 0) {
+            alert("Unesite ispravan username")
+            return
+        }
+
+        var regEmail = /^(([^<>()\\.,;:\s@"]+(\.[^<>()\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}\.[0-9]{1, 3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/g
+        if (!regEmail.test(this.state.email)) {
+            alert("Unesite ispravan email")
+            return
+        }
+
+        var regPass = /^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!{}<>@^*()_=;:'\-#$%&? "]).*$/g
+        if (!regPass.test(this.state.password)) {
+            alert("Password mora sadrzavati minimalno 8 karaktera, veliko i malo slovo, broj i znak")
+            return
+        }
+        if (this.state.tipUloge == "") {
+            alert("Odaberite ulogu")
+            return
         }
         axios.post(getBaseUrl() + '/user/register', {
             username: this.state.username,
@@ -75,24 +82,13 @@ export class Korisnici extends Component {
                 name: ""
             }
         }).then(response => {
-            if (response.status === 201 || response.status === 200) alert("Korisnik uspješno registrovan!")
+            if (response.status === 201 || response.status === 200) {
+                alert("Korisnik uspješno registrovan!")
+                window.location.href = "/admin/korisnici"
+            }
         }).catch(err => {
-            console.log(err)
-            alert(err.response.data.errors)
+            alert("Username i email moraju biti jedinstveni")
         })
-
-        var TEMP = [...this.state.Korisnici];
-        const temp = {
-            username: this.state.username,
-            email: this.state.email,
-            password: this.state.password,
-            roleList: [{
-                roleId: idUloge,
-            }],
-            obrisati: false
-        }
-        TEMP.push(temp);
-        this.setState({ Korisnici: TEMP })
     }
 
     handleChangeUloga = (selectedOption) => {
@@ -155,45 +151,43 @@ export class Korisnici extends Component {
                     </button>
                     </div>
                 </div>
-                <form>
-                    <div className="formaKorisnici">
-                        <h2>Unos korisnika</h2>
-                        <div className="form-grupaKorisnici">
-                            <label htmlFor="username">Username:</label>
-                            <input type="text"
-                                name="username"
-                                value={this.state.username}
-                                onChange={e => this.unosNovog(e)} />
-                        </div>
-                        <div className="form-grupaKorisnici">
-                            <label htmlFor="username">Email:</label>
-                            <input type="text"
-                                name="email"
-                                value={this.state.email}
-                                onChange={e => this.unosNovog(e)} />
-                        </div>
-                        <div className="form-grupaKorisnici">
-                            <label htmlFor="password">Password:</label>
-                            <input type="password"
-                                name="password"
-                                value={this.state.password}
-                                onChange={e => this.unosNovog(e)} />
-                        </div>
-                        <div className="form-grupaKorisnici">
-                            <label htmlFor="uloga">Uloga:</label>
-                            <Dropdown options={this.state.options}
-                                value={this.state.temp}
-                                onChange={(e) => {
-                                    this.handleChangeUloga(e);
-                                }}
-                                placeholder="Odaberite ponuđeni tip uloge"
-                            />
-                        </div>
-                        <button type="submit" className="btnDodajKorisnika" onClick={this.kreirajKorisnika}>
-                            Dodavanje novog korisnika
-                </button>
+                <div className="formaKorisnici">
+                    <h2>Unos korisnika</h2>
+                    <div className="form-grupaKorisnici">
+                        <label htmlFor="username">Username:</label>
+                        <input type="text"
+                            name="username"
+                            value={this.state.username}
+                            onChange={e => this.unosNovog(e)} />
                     </div>
-                </form>
+                    <div className="form-grupaKorisnici">
+                        <label htmlFor="username">Email:</label>
+                        <input type="text"
+                            name="email"
+                            value={this.state.email}
+                            onChange={e => this.unosNovog(e)} />
+                    </div>
+                    <div className="form-grupaKorisnici">
+                        <label htmlFor="password">Password:</label>
+                        <input type="password"
+                            name="password"
+                            value={this.state.password}
+                            onChange={e => this.unosNovog(e)} />
+                    </div>
+                    <div className="form-grupaKorisnici">
+                        <label htmlFor="uloga">Uloga:</label>
+                        <Dropdown options={this.state.options}
+                            value={this.state.temp}
+                            onChange={(e) => {
+                                this.handleChangeUloga(e);
+                            }}
+                            placeholder="Odaberite ponuđeni tip uloge"
+                        />
+                    </div>
+                    <button className="btnDodajKorisnika" onClick={this.kreirajKorisnika}>
+                        Dodavanje novog korisnika
+                </button>
+                </div>
             </div>
         )
     }

@@ -3,6 +3,7 @@ package com.example.ppis.service;
 import com.example.ppis.dto.ResponseMessageDTO;
 import com.example.ppis.dto.SkillDTO;
 import com.example.ppis.model.*;
+import com.example.ppis.repository.CertificateRepository;
 import com.example.ppis.repository.EmployeeRepository;
 import com.example.ppis.repository.EmployeeSkillRepository;
 import com.example.ppis.repository.SkillRepository;
@@ -24,6 +25,9 @@ public class EmployeeService {
 
     @Autowired
     SkillRepository skillRepository;
+
+    @Autowired
+    CertificateRepository certificateRepository;
 
     public List<Employee> getAll() {
         List<Employee> all = new ArrayList<>();
@@ -56,6 +60,22 @@ public class EmployeeService {
     public HashMap<String, String> delete(Integer id) throws Exception {
         if (!employeeRepository.existsById(id)) {
             throw new Exception("Uposlenik sa id-em " + id + " ne postoji");
+        }
+
+        List<Certificate> certificates = new ArrayList<>();
+        certificateRepository.findAll().forEach(certificates::add);
+        for(Certificate certificate : certificates) {
+            if(certificate.getEmpolyeeOnCrtificate().getId().equals(id)) {
+                certificateRepository.delete(certificate);
+            }
+        }
+
+        List<EmployeeSkill> employeeSkills = new ArrayList<>();
+        employeeSkillRepository.findAll().forEach(employeeSkills::add);
+        for(EmployeeSkill employeeSkill : employeeSkills) {
+            if(employeeSkill.getEmployee().getId().equals(id)) {
+                employeeSkillRepository.delete(employeeSkill);
+            }
         }
 
         employeeRepository.deleteById(id);

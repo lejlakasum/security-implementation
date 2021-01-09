@@ -12,7 +12,7 @@ export class DodavanjeVjestine extends Component {
             vjestine: [], // Za popunjavnje vjestina
             temp: '',
             temp2: '',
-            level: '',
+            level: 0,
             vrijeme: '',
             Uposlenik: '', // Za odabranog uposlenika
             tipVjestine: '', // Za odabrani tip vjestine
@@ -77,6 +77,20 @@ export class DodavanjeVjestine extends Component {
                 skillTypeName = this.state.vjestine[i].skillTypeName;
                 skillTypeId = this.state.vjestine[i].id;
             }
+        }
+
+        if (this.state.Uposlenik == "") {
+            alert("Odaberite uposlenika")
+            return
+        }
+        if (this.state.tipVjestine == "") {
+            alert("Odaberite vjestinu")
+            return
+        }
+
+        if (this.state.level < 1 || this.state.level > 5) {
+            alert("Level mora biti izmedju 1 i 5")
+            return
         }
 
         var ruta = getBaseUrl() + "/employees/" + idUposlenika + "/skills"

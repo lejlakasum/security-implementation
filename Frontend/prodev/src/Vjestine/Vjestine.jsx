@@ -9,7 +9,7 @@ export class Vjestine extends Component {
         super(props)
         this.state = {
             Vjestine: [
-                { tip: "", vjestina: "", obrisati: false },
+                { tip: "", vjestina: "" },
             ],
             Tipovivjestina: [], // Za popunjavanje tipova vjestina
             vjestine: [],
@@ -72,6 +72,16 @@ export class Vjestine extends Component {
             if (this.state.Tipovivjestina[i].value === this.state.tip) idVjestine = this.state.Tipovivjestina[i].id;
         }
 
+        if (this.state.tip == "") {
+            alert("Odaberite tip vjestine")
+            return
+        }
+        var reg = /^[A-Za-z0-9\s\-]*$/g
+        if (!reg.test(this.state.vjestina) || !this.state.vjestina || this.state.vjestina.trim().length == 0) {
+            alert("Unesite ime vjestine")
+            return
+        }
+
         axios.post(getBaseUrl() + '/skills', {
             name: this.state.vjestina,
             skillType: {
@@ -79,19 +89,19 @@ export class Vjestine extends Component {
                 name: this.state.tip
             }
         })
-
-        var TEMP = [...this.state.vjestine];
-        const temp = {
-            name: this.state.vjestina,
-            skillType: {
-                id: idVjestine,
-                name: this.state.tip
-            },
-            obrisati: false
-        }
-        TEMP.push(temp);
-        this.setState({ vjestine: TEMP })
-        alert("Vještina uspješno kreirana!")
+            .then(response => {
+                var TEMP = [...this.state.vjestine];
+                const temp = {
+                    id: response.data.id,
+                    name: this.state.vjestina,
+                    skillTypeId: idVjestine,
+                    skillTypeName: this.state.tip,
+                    obrisati: false
+                }
+                TEMP.push(temp);
+                this.setState({ vjestine: TEMP })
+                alert("Vještina uspješno kreirana!")
+            })
     }
 
     prikazVjestine() {
@@ -102,16 +112,6 @@ export class Vjestine extends Component {
                 <tr key={name}>
                     <td>{skillTypeName}</td>
                     <td>{name}</td>
-                    <td>{obrisati}
-                        <div className="brisanje">
-                            <label>
-                                <input type="checkbox"
-                                    brisati={this.state.checked}
-                                    onChange={e => this.handleChange(e, index)}
-                                />
-                            </label>
-                        </div>
-                    </td>
                 </tr>
             )
         })

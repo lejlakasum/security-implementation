@@ -16,6 +16,12 @@ const ChangePassword = ({ ...props }) => {
             return
         }
 
+        var regPass = /^.*(?=.{8,})(?=.*[a-zA-Z])(?=.*\d)(?=.*[!{}<>@^*()_=;:'\-#$%&? "]).*$/g
+        if (!regPass.test(newPass)) {
+            alert("Password mora sadrzavati minimalno 8 karaktera, veliko i malo slovo, broj i znak")
+            return
+        }
+
         var route = getBaseUrl() + '/user/change-password'
         var request = {
             oldPassword: oldPass,
@@ -36,6 +42,9 @@ const ChangePassword = ({ ...props }) => {
                 else if (response.status == 400) {
                     alert("Pogresan stari password")
                 }
+            })
+            .catch(error => {
+                alert("Neispravan stari password")
             })
     }
 

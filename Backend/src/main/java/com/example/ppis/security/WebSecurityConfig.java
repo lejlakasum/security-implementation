@@ -77,7 +77,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/skills/{id}")
                 .hasAuthority("hr")
                 .antMatchers(HttpMethod.GET, "/skills/{id}/employees")
-                .hasAuthority("hr")
+                .hasAnyAuthority("hr", "admin")
 
                 .antMatchers(HttpMethod.GET, "/employees")
                 .hasAnyAuthority("admin","hr")
