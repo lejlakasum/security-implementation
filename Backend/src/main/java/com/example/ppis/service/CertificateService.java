@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -14,7 +15,11 @@ public class CertificateService {
     @Autowired
     CertificateRepository certificateRepository;
 
-    public Certificate addCertificate(Certificate certificate) {
+    public Certificate addCertificate(Certificate certificate) throws Exception{
+
+        if (certificate.getDateOfIssue().compareTo(certificate.getExpireDate())>0){
+            throw new Exception("Molimo unesite ispravne datume, datum izdavanja mora biti prije datuma isteka!");
+        }
         return certificateRepository.save(certificate);
     }
 

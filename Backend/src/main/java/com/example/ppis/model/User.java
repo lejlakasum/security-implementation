@@ -1,10 +1,7 @@
 package com.example.ppis.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -18,6 +15,7 @@ public class User {
     @NotNull
     @NotEmpty
     @NotBlank
+    @Size(min = 2, max = 30)
     private String username;
 
     @NotEmpty

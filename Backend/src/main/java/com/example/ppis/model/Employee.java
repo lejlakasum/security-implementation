@@ -1,9 +1,7 @@
 package com.example.ppis.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.List;
 
@@ -18,13 +16,16 @@ public class Employee {
     @NotBlank
     @NotNull
     @NotEmpty
+    @Size(min = 2,max = 15)
     private String firstName;
 
     @NotBlank
     @NotNull
     @NotEmpty
+    @Size(min = 2,max = 15)
     private String lastName;
 
+    @Past
     private Date birthDate;
 
     private Date dateOfEmployment;

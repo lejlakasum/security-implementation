@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "Skill")
@@ -16,6 +17,7 @@ public class Skill {
     @NotBlank
     @NotEmpty
     @NotNull
+    @Size(min = 2,max = 40)
     private String name;
 
     @ManyToOne
