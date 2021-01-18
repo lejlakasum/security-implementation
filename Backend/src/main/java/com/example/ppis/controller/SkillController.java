@@ -32,7 +32,7 @@ public class SkillController {
                 .build();
     }
 
-    @PostMapping("/skills")
+    @PostMapping("/api/skills")
     @ResponseStatus(HttpStatus.CREATED)
     @Valid
     ResponseEntity<Skill> add(@RequestBody @Valid Skill skill) throws Exception {
@@ -44,7 +44,7 @@ public class SkillController {
     }
 
 
-    @DeleteMapping("/skills/{id}")
+    @DeleteMapping("/api/skills/{id}")
     ResponseEntity<HashMap<String,String>> delete(@PathVariable Integer id) throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(skillService.delete(id), HttpStatus.OK);
@@ -53,7 +53,7 @@ public class SkillController {
         return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    @GetMapping("/skills")
+    @GetMapping("/api/skills")
     ResponseEntity<List<Skill>> getAll() {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(skillService.getAll(), HttpStatus.OK);
@@ -62,7 +62,7 @@ public class SkillController {
         return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    @GetMapping("skills/{id}/employees")
+    @GetMapping("/api/skills/{id}/employees")
     ResponseEntity<List<Employee>> getEmployees(@PathVariable Integer id) throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(skillService.getEmployeesBySkill(id), HttpStatus.OK);

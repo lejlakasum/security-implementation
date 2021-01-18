@@ -34,7 +34,7 @@ public class SkillTypeController {
                 .build();
     }
 
-    @GetMapping("/skill-types")
+    @GetMapping("/api/skill-types")
     ResponseEntity<List<SkillType>> getAll() {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(skillTypeService.getAll(), HttpStatus.OK);

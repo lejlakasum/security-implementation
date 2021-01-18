@@ -33,7 +33,7 @@ public class CertificateController {
                 .build();
     }
 
-    @PostMapping("/certificate")
+    @PostMapping("/api/certificate")
     @ResponseStatus(HttpStatus.CREATED)
     @Valid
     ResponseEntity<Certificate> add(@RequestBody @Valid Certificate certificate) throws Exception {
@@ -44,7 +44,7 @@ public class CertificateController {
         return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    @GetMapping("/certificate/{id}")
+    @GetMapping("/api/certificate/{id}")
     ResponseEntity<Certificate> getCertificateById(@PathVariable Integer id) throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(certificateService.getCertificateById(id), HttpStatus.OK);
@@ -53,7 +53,7 @@ public class CertificateController {
         return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    @GetMapping("/certificate/all")
+    @GetMapping("/api/certificate/all")
     ResponseEntity<List<Certificate>> getAllCertificates() throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(certificateService.getAllCertificates(), HttpStatus.OK);
@@ -62,7 +62,7 @@ public class CertificateController {
         return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    @DeleteMapping("/certificate/{id}")
+    @DeleteMapping("/api/certificate/{id}")
     ResponseEntity<Void> deleteCertificate(@PathVariable Integer id) throws Exception {
         if(bucket2.tryConsume(1)) {
             certificateService.deleteCertificate(id);

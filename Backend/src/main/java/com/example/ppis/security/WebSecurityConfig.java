@@ -39,14 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/user/login", "/user/validate")
-                .permitAll()
-
-                .antMatchers(HttpMethod.GET, "/category", "/category/*",
-                        "/subcategory", "/subcategory/*",
-                        "/product", "/product/*", "/product/*/*",
-                        "/image", "/image/*",
-                        "/shop/*")
+                .antMatchers(HttpMethod.POST, "/api/user/login", "/api/user/validate")
                 .permitAll()
 
                 .antMatchers(HttpMethod.GET, "/swagger-resources/**",
@@ -56,47 +49,47 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/csrf",
                         "/").permitAll()
 
-                .antMatchers(HttpMethod.GET, "/user/all")
+                .antMatchers(HttpMethod.GET, "/api/user/all")
                 .hasAuthority("admin")
-                .antMatchers(HttpMethod.POST, "/user/register")
+                .antMatchers(HttpMethod.POST, "/api/user/register")
                 .hasAuthority("admin")
-                .antMatchers(HttpMethod.DELETE, "/user/{id}")
+                .antMatchers(HttpMethod.DELETE, "/api/user/{id}")
                 .hasAuthority("admin")
-                .antMatchers(HttpMethod.POST, "/user/change-password")
+                .antMatchers(HttpMethod.POST, "/api/user/change-password")
                 .hasAnyAuthority("admin", "hr")
-                .antMatchers(HttpMethod.GET, "/user/{email}")
+                .antMatchers(HttpMethod.GET, "/api/user/{email}")
                 .hasAnyAuthority("admin", "hr")
 
-                .antMatchers(HttpMethod.GET, "/skill-types")
+                .antMatchers(HttpMethod.GET, "/api/skill-types")
                 .hasAuthority("hr")
 
-                .antMatchers(HttpMethod.GET, "/skills")
+                .antMatchers(HttpMethod.GET, "/api/skills")
                 .hasAnyAuthority("admin","hr")
-                .antMatchers(HttpMethod.POST, "/skills")
+                .antMatchers(HttpMethod.POST, "/api/skills")
                 .hasAuthority("hr")
-                .antMatchers(HttpMethod.DELETE, "/skills/{id}")
+                .antMatchers(HttpMethod.DELETE, "/api/skills/{id}")
                 .hasAuthority("hr")
-                .antMatchers(HttpMethod.GET, "/skills/{id}/employees")
+                .antMatchers(HttpMethod.GET, "/api/skills/{id}/employees")
                 .hasAnyAuthority("hr", "admin")
 
-                .antMatchers(HttpMethod.GET, "/employees")
+                .antMatchers(HttpMethod.GET, "/api/employees")
                 .hasAnyAuthority("admin","hr")
-                .antMatchers(HttpMethod.POST, "/employees")
+                .antMatchers(HttpMethod.POST, "/api/employees")
                 .hasAuthority("hr")
-                .antMatchers(HttpMethod.DELETE, "/employees/{id}")
+                .antMatchers(HttpMethod.DELETE, "/api/employees/{id}")
                 .hasAuthority("hr")
-                .antMatchers(HttpMethod.GET, "/employees/{id}/skills")
+                .antMatchers(HttpMethod.GET, "/api/employees/{id}/skills")
                 .hasAnyAuthority("admin","hr")
-                .antMatchers(HttpMethod.POST, "/employees/{id}/skills")
+                .antMatchers(HttpMethod.POST, "/api/employees/{id}/skills")
                 .hasAuthority("hr")
 
-                .antMatchers(HttpMethod.POST, "/certificate")
+                .antMatchers(HttpMethod.POST, "/api/certificate")
                 .hasAuthority("hr")
-                .antMatchers(HttpMethod.DELETE, "/certificate/{id}")
+                .antMatchers(HttpMethod.DELETE, "/api/certificate/{id}")
                 .hasAuthority("hr")
-                .antMatchers(HttpMethod.GET, "/certificate/{id}")
+                .antMatchers(HttpMethod.GET, "/api/certificate/{id}")
                 .hasAnyAuthority("admin","hr")
-                .antMatchers(HttpMethod.GET, "/certificate/all")
+                .antMatchers(HttpMethod.GET, "/api/certificate/all")
                 .hasAnyAuthority("admin","hr")
 
                 .anyRequest()

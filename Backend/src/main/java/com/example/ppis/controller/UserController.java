@@ -42,7 +42,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/user/login")
+    @PostMapping("/api/user/login")
     ResponseEntity<LoginDto> login(@RequestBody @Valid UserLoginDTO user) throws Exception {
         if(bucket.tryConsume(1)) {
             return new ResponseEntity<>(userService.login(user), HttpStatus.OK);
@@ -50,7 +50,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    @PostMapping("/user/register")
+    @PostMapping("/api/user/register")
     @Valid
     ResponseEntity<UserRegisterDTO> register(@RequestBody @Valid User user) throws Exception {
         if(bucket2.tryConsume(1)) {
@@ -60,7 +60,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/api/user/{id}")
     ResponseEntity<HashMap<String,String>> deleteUser(@PathVariable Integer id) throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(userService.deleteUserById(id), HttpStatus.OK);
@@ -70,7 +70,7 @@ public class UserController {
 
     }
 
-    @GetMapping("/user/all")
+    @GetMapping("/api/user/all")
     ResponseEntity<List<UserDto>> allUsers() throws Exception {
         if(bucket2.tryConsume(1)) {
             return  new ResponseEntity<>(userService.getListOfUsers(), HttpStatus.OK);
@@ -80,7 +80,7 @@ public class UserController {
 
     }
 
-    @PostMapping("/user/validate")
+    @PostMapping("/api/user/validate")
     @Valid
     ResponseEntity<Void> validateToken(@RequestBody @Valid LoginDto request, @RequestParam String role) {
         try {
@@ -92,7 +92,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/user/change-password")
+    @PostMapping("/api/user/change-password")
     @Valid
     ResponseEntity<UserDto> changePassword(@RequestBody @Valid ChangePasswordDto changePasswordDto) {
         if(bucket2.tryConsume(1)) {
@@ -110,7 +110,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.TOO_MANY_REQUESTS);
     }
 
-    @GetMapping("/user/{email}")
+    @GetMapping("/api/user/{email}")
     ResponseEntity<UserDto> getUserByEmail(@PathVariable String email, @RequestHeader("Authorization") String token) {
         if(bucket2.tryConsume(1)) {
             try {
